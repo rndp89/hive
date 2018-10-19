@@ -3,3 +3,9 @@ SELECT count(1), order_status, order_date FROM orders
 WHERE order_Date LIKE "2013-09-25%"
 GROUP BY order_status, order_Date
 ORDER BY order_Status;
+
+-- Get number of completed order for each date before '2013-12-14'
+SELECT count(1), order_status, order_date FROM orders
+WHERE order_date < '2013-12-14%' AND order_status = 'COMPLETE'
+GROUP BY order_date, order_status
+ORDER BY order_date;
