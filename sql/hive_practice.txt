@@ -9,3 +9,11 @@ SELECT count(1), order_status, order_date FROM orders
 WHERE order_date < '2013-12-14%' AND order_status = 'COMPLETE'  -- in this case date si in YYYY-MM-DD format, other format will cause problem
 GROUP BY order_date, order_status
 ORDER BY order_date;
+
+--Get number of pending,review and onhold orders for each date for the month of december 2013
+
+SELECT count(1) as count, order_date FROM orders -- mandatory to alias count to use with ORDER BY clause
+WHERE order_date LIKE '2013-12%' AND order_status IN ('PENDING', 'PENDING_PAYMENT', 'PAYMENT_REVIEW', 'ON_HOLD')
+GROUP BY order_date -- you have to specify all the columns that are specified with SELECT clause
+ORDER BY count;  -- IMP order by count
+
