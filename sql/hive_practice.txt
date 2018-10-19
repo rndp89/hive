@@ -6,6 +6,6 @@ ORDER BY order_Status;
 
 -- Get number of completed order for each date before '2013-12-14'
 SELECT count(1), order_status, order_date FROM orders
-WHERE order_date < '2013-12-14%' AND order_status = 'COMPLETE'
+WHERE order_date < '2013-12-14%' AND order_status = 'COMPLETE'  -- in this case date si in YYYY-MM-DD format, other format will cause problem
 GROUP BY order_date, order_status
 ORDER BY order_date;
