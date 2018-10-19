@@ -1,0 +1,5 @@
+--Get orders by order_status for 25 nov 2013
+SELECT count(1), order_status, order_date FROM orders
+WHERE order_Date LIKE "2013-09-25%"
+GROUP BY order_status, order_Date
+ORDER BY order_Status;
