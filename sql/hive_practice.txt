@@ -1,3 +1,11 @@
+CREATE TABLE orders(
+order_id int,
+order_date string,
+order_customer_id int,
+order_status string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE;
+
 --Get orders by order_status for 25 nov 2013
 SELECT count(1), order_status, order_date FROM orders
 WHERE order_Date LIKE "2013-09-25%"
