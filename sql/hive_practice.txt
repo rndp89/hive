@@ -25,3 +25,12 @@ WHERE order_date LIKE '2013-12%' AND order_status IN ('PENDING', 'PENDING_PAYMEN
 GROUP BY order_date -- you have to specify all the columns that are specified with SELECT clause
 ORDER BY count;  -- IMP order by count
 
+-- Create external table in HIVE
+
+CREATE EXTERNAL TABLE deck_of_cards_external(
+color string,
+suit string,
+pip string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
+STORED AS TEXTFILE --this is optional, its by default text file, specify if you want other formats.
+LOCATION '/user/randeep89/cards' -- LOCATION is mandatory in EXTERNAL TABLE
