@@ -1,0 +1,5 @@
+--CTAS stands for Create Table As Select
+--ORC file is a binary file format, so you can not directly load text files into ORC tables.
+--ORC stands for *Optimized Row Columnar* which means it can store data in an optimized way than the other file formats.
+--ORC reduces the size of the original data up to 75%.
+--As a result the speed of data processing also increases. ORC shows better performance than Text, Sequence and RC file formats.
