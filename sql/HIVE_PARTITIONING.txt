@@ -11,8 +11,10 @@ STORED AS TEXTFILE;
 select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,
 substr(order_date, 1, 7) order_month from orders_r.orders limit 10;
 
---for dynamic partitioning make sure
+--for dynamic partitioning make sure following parameters are having these values.
 set hive.exec.dynamic.partition.mode=nonstrict
+hive.exec.dynamic.partition=true
+      --otherwise you have to create partitions manually and insert data into partitions manually.
 
 --now insert the data into partitioned table (order_r_partitioned.orders) from non partitioned table (orders_r.orders)
 INSERT INTO TABLE order_r_partitioned.orders partition (order_month)
