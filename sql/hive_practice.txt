@@ -35,8 +35,4 @@ ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE --this is optional, its by default text file, specify if you want other formats.
 LOCATION '/user/randeep89/cards' -- LOCATION is mandatory in EXTERNAL TABLE
 
---CREATE HIVE PARTITIONED TABLE
---TBC
-select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,
-substr(order_date, 1, 7) order_month from orders_r.orders limit 10;
 
