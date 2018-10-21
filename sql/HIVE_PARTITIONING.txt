@@ -1,1 +1,38 @@
-sql/hive_practice_EXTERNAL+MANAGED.txt
+--CREATE HIVE PARTITIONED TABLE
+create database order_r_partitioned;
+use order_r_partitioned;
+CREATE TABLE orders(
+order_id int, order_date string, order_customer_id int, order_status string)
+PARTITIONED BY (order_month string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
+STORED AS TEXTFILE;
+
+--write a query to test ouput, to verify the data from where you want to copy the data.
+select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,
+substr(order_date, 1, 7) order_month from orders_r.orders limit 10;
+
+--for dynamic partitioning make sure
+set hive.exec.dynamic.partition.mode=nonstrict
+
+--now insert the data into partitioned table (order_r_partitioned.orders) from non partitioned table (orders_r.orders)
+INSERT INTO TABLE order_r_partitioned.orders partition (order_month)
+select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,
+substr(order_date, 1, 7) order_month from orders_r.orders;
+desc formatted orders;
+
+-- select query sample
+SELECT * FROM order_r_partitioned.orders WHERE order_month='2014-02' LIMIT 2;
+      --OUTPUT                                          --below is order month which is being fetched from the directory name(partition)
+      --30776   2014-02-01      11805   COMPLETE        2014-02
+      --30777   2014-02-01      5114    ON_HOLD         2014-02
+
+      
+
+
+-- But, if you cat the partitions using following command, you will not see the order_month as above.
+hive (default)> dfs -cat /apps/hive/warehouse/order_r_partitioned.db/orders/order_month*/*;
+68681|2014-07-20|11014|PENDING_PAYMENT
+68682|2014-07-21|6017|COMPLETE
+
+
+
