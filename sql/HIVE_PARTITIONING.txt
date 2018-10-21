@@ -14,7 +14,9 @@ substr(order_date, 1, 7) order_month from orders_r.orders limit 10;
 --for dynamic partitioning make sure following parameters are having these values.
 set hive.exec.dynamic.partition.mode=nonstrict
 hive.exec.dynamic.partition=true
-      --otherwise you have to create partitions manually and insert data into partitions manually.
+      --otherwise you have two options:
+      --create partitions manually and insert data into partitions manually.
+      --incase of sub-partitions, you just need to specify the parent partitions, subpartitions will be created dynamically even in                                                                                                                               strict mode.
 
 --now insert the data into partitioned table (order_r_partitioned.orders) from non partitioned table (orders_r.orders)
 INSERT INTO TABLE order_r_partitioned.orders partition (order_month)
