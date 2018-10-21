@@ -1,0 +1,1 @@
+sql/hive_practice_EXTERNAL+MANAGED.txt
