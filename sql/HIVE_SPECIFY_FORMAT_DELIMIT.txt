@@ -11,3 +11,17 @@ STORED AS INPUTFORMAT
   'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
 OUTPUTFORMAT
   'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
+  
+--Demo of delimiters
+CREATE TABLE DELIMIT_DEMO2(i int, j int)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ':' -- only one char works, incase of multiple chars first char will work.
+NULL DEFINED AS 'THERE IS NOTHING HERE'   --more than one char works
+
+--inserting
+ INSERT INTO TABLE DELIMIT_dEMO2 VALUES (NULL, 20);
+--seeing the values
+	--hive (orders_r)> dfs -cat /user/hive/warehouse/randeep/orders.db/delimit_demo2/*;
+	--THERE IS NOTHING HERE:20   --':' is a column delimiter.
+
+
+ 
