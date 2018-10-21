@@ -1,5 +1,37 @@
 --CTAS stands for Create Table As Select
+
 --ORC file is a binary file format, so you can not directly load text files into ORC tables.
---ORC stands for **Optimized Row Columnar** which means it can store data in an optimized way than the other file formats.
+--ORC stands for OPTIMIZED ROW COLUMNAR which means it can store data in an optimized way than the other file formats.
 --ORC reduces the size of the original data up to 75%.
 --As a result the speed of data processing also increases. ORC shows better performance than Text, Sequence and RC file formats.
+
+--DEMO
+CREATE TABLE orders_orc -- you cannot specify the column names, as we are copying the data from another table.
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ':'   -- not important, 
+STORED AS ORC
+AS    -- use of AS keyword while creating CTAS table is mandatory.
+SELECT * FROM orders_r.orders;
+
+--see SERDE
+desc formatted orders_orc;
+--if you want to know the custom format of SERDE.
+--create table with STORED AS <format>
+show create table orders_orc;
+
+--DEMO1, create ORC_SERDE
+CREATE TABLE orders_orc_serde(
+order_id int, order_date string, order_customer_id int, order_status string)
+STORED AS ORC;
+
+--Now if you run the following, you will see SERDE being chosed automatically
+show create table orders_orc_serde;
+--And, row format is "ROW FORMAT SERDE", which means we dont need to specify "ROW FORMAT DELIMITED BY" with formats other than TEXTFILE
+
+--now we can insert data into newly created orc table.
+INSERT INTO orders_orc_serde
+select * from orders;
+
+
+
+
+
