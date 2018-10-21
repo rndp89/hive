@@ -1,19 +1,13 @@
---Bucketing will divide your data evenly(try to use primary key as bucketing field)
---running queries on bucketed table are much fasters.
+-- Creating a table with PARQUET file format.
+CREATE TABLE orders_par(test int, test1 string)
+STORED AS PARQUET;
 
---Create a bucketed table
-CREATE TABLE orders_bucket(
-order_id int,
-order_date string,
-order_customer_id int,
-order_status string)
-CLUSTERED BY (order_id) INTO 13 BUCKETS  -- In case, you want to create partitions, create before clustered by.
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
-STORED AS TEXTFILE;
+-- Creating a table with PARQUET file format with explict SerDe.
 
---Now insert data from non partitioned table (YOU CANNOT USE "LOAD LOCAL INPATH" to load data in partitioned/bucketed table)
-INSERT INTO TABLE orders_bucket
-SELECT order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status
-FROM orders_r.orders;
--- after running the above query, you will see 16 directories under your table directory.
--- you can view them using  "dfs -ls /apps/hive/warehouse/order_r_partitioned.db/orders_bucket"
+CREATE TABLE orders_par_explicit(test int, test1 string)
+ROW FORMAT SERDE
+  'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'
+STORED AS INPUTFORMAT
+  'org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat'
+OUTPUTFORMAT
+  'org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat'
