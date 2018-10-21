@@ -1,3 +1,6 @@
+--Bucketing will divide your data evenly(try to use primary key as bucketing field)
+--running queries on bucketed table are much fasters.
+
 --Create a bucketed table
 CREATE TABLE orders_bucket(
 order_id int,
