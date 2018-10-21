@@ -1,0 +1,18 @@
+--LOAD command doesn't check data quality, it just dumps the data into table.
+--LOAD command doesn't run MR job behid the scene.
+--you cannot apply any data transformation with LOAD command.
+--you will not see any exception while loading, it will load junk data in case of mismatch.
+
+-- LOAD data from local FS
+create table deck_local(color string, suit varchar(7), pip varchar(1));
+LOAD DATA LOCAL INPATH '/home/randeep89/deckofcards.txt' INTO TABLE deck_local;
+		-- data is copied under /apps/hive/warehouse/order_r_partitioned.db/deck_local/deckofcards.txt
+-- LOAD data from HDFS
+create table decK_khdfs(color string, suit varchar(7), pip varchar(1));
+LOAD DATA INPATH '/user/randeep89/deckofcards.txt' INTO TABLE deck_hdfs;
+		-- data is copied under /apps/hive/warehouse/order_r_partitioned.db/deck_hdfs/deckofcards.txt
+-- LOAD and overwrite data
+LOAD DATA INPATH '/user/randeep89/deck.txt' OVERWRITE INTO TABLE deck_hdfs;
+ LOAD DATA LOCAL INPATH '/home/randeep89/deck.txt' OVERWRITE INTO TABLE deck_LOCAL;git
+
+ 
