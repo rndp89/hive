@@ -1,0 +1,21 @@
+--TEZ is another framework/engine, which runs on YARN but doesn't launch MR job.Rather, it uses DAGs.
+--following parameter will show which engine is being used currently to process data.
+
+set hive.execution.engine;  --mr/tez
+--to switch to tez
+
+set hive.execution.engine=tez;
+
+--TEZ is relatively faster to run HIVE and PIG scripts, but TEZ is only on AMBARI.
+
+--join orders and order_items, to get total revenue per day.
+
+SELECT SUBSTR(o.order_date, 1, 10) order_date, SUM(oi.order_item_subtotal) revenue_per_day
+FROM orders o JOIN order_items oi
+ON o.order_id = oi.order_item_order_id
+GROUP BY order_date;
+
+
+
+
+ 
