@@ -1,0 +1,7 @@
+--You can only use sub queries with FROM clause unlike RDBMS.
+--There is no EXISTS clause in HIVE.
+--Sub query has to have the alias in HIVE.
+
+SELECT DISTINCT * FROM (SELECT ORDER_ID, SUBSTR(ORDER_dATE, 1, 10) ORDER_DATE FROM ORDERS) Q LIMIT 10;
+
+--NEED TO PRACTICE MORE WITH REAL USE CASES
