@@ -5,3 +5,12 @@
 SELECT DISTINCT * FROM (SELECT ORDER_ID, SUBSTR(ORDER_dATE, 1, 10) ORDER_DATE FROM ORDERS) Q LIMIT 10;
 
 --NEED TO PRACTICE MORE WITH REAL USE CASES
+
+--ORDER BY CLAUSE sorts the data in a single reducer, which means it sorts whole output data.
+--whereas SORT BY CLAUSE sorts data in each reducer.
+
+select order_status, count(1) order_status_count from orders group by order_status;
+select order_status, count(1) order_status_count from orders group by order_status order by order_status_count;
+select order_status, count(1) order_status_count from orders group by order_status order by order_status_count desc;
+
+--NEED TO PRACTICE SORT BY
