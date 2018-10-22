@@ -1,0 +1,38 @@
+--limitations of insert
+--there is always auto commit, if the operation is successful and no rollback, unlike RDBMS
+--tables must be bucketed and ORC format
+--Alter table is not supported for ACID tables.
+--FOR more https://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.6.5/bk_data-access/content/transaction-limitations.html
+
+--DELETE not working , because file format is not ORC.
+hive (order_r_partitioned)> delete from dml where i =1;
+FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations.
+
+
+SET hive.txn.manager; --by default its org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager, perfer org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager
+
+--So, to use update and delete on a table, your table creation should look like this.
+CREATE TABLE DML(i int, j string)
+CLUSTERED BY (i) INTO 4 BUCKETS  -- i is bucketed column
+STORED AS ORC
+TBLPROPERTIES ('TRANSACTIONAL' = 'TRUE');
+
+---MANADATORY TO SET
+set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
+set hive.support.concurrency=true
+
+--insert records
+insert into table dml values(1, 'hi');
+insert into table dml values(2, 'hello');
+
+--update record --YOU CANNOT UPDATE THE BUCKETED COLUMN.
+--trying
+hive (order_r_partitioned)> update dml set i=10 where j='hi';
+FAILED: SemanticException [Error 10302]: Updating values of bucketing columns is not supported.  Column i.
+
+--VALID UPDATE
+update dml set j='HI' where i =10;
+
+--VALID DELETE
+DELETE FROM DML WHERE i=2;
+ 
