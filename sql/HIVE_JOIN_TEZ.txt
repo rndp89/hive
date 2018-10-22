@@ -1,7 +1,7 @@
 --TEZ is another framework/engine, which runs on YARN but doesn't launch MR job.Rather, it uses DAGs.
 --following parameter will show which engine is being used currently to process data.
 
-set hive.execution.engine;  --mr/tez
+set hive.execution.engine;  --mr/tez/spark
 --to switch to tez
 
 set hive.execution.engine=tez;
