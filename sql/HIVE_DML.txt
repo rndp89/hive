@@ -20,6 +20,9 @@ TBLPROPERTIES ('TRANSACTIONAL' = 'TRUE');
 ---MANADATORY TO SET
 set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
 set hive.support.concurrency=true
+set hive.exec.dynamic.partition.mode=nonstrict
+set hive.compactor.initiator.on=true
+set hive.worker.threads=1 (a positive number)
 
 --insert records
 insert into table dml values(1, 'hi');
@@ -35,4 +38,10 @@ update dml set j='HI' where i =10;
 
 --VALID DELETE
 DELETE FROM DML WHERE i=2;
+
+--All the below insert statments are valid and will insert null, incase of no value even in bucketed column.
+insert into table dml (i) values (3);
+insert into table dml (i) values ('hello');
+insert into table dml (j) values ('hey');
+
  
