@@ -1,0 +1,18 @@
+--Convert textfile format to avro from text
+
+--first create table with desired format and same number/types of column as the source table
+create table orders_avro_convert(
+order_id int,
+order_date string,
+order_customer_id int,	
+order_status string)
+STORED AS AVRO;
+
+
+--now copy the data from text table
+INSERT INTO TABLE orders_avro_convert
+Select * from orders;
+
+--you can convert from any format to any format.
+
+ 
