@@ -1,0 +1,91 @@
+--EXPLAIN "query"
+--It will explain the execution plan divided into stages
+
+ EXPLAIN SELECT SUBSTR(o.order_date, 1, 10) order_date, SUM(oi.order_item_subtotal) revenue_per_day
+               FROM orders o JOIN order_items oi
+               ON o.order_id = oi.order_item_order_id
+               GROUP BY order_date;
+
+--#########################SAMPLE OUTPUT ####################################			   
+--STAGE DEPENDENCIES:
+--  Stage-5 is a root stage
+--  Stage-2 depends on stages: Stage-5
+--  Stage-0 depends on stages: Stage-2
+--
+--STAGE PLANS:
+--  Stage: Stage-5
+--    Map Reduce Local Work
+--      Alias -> Map Local Tables:
+--        o
+--          Fetch Operator
+--            limit: -1
+--      Alias -> Map Local Operator Tree:
+--        o
+--          TableScan
+--            alias: o
+--            filterExpr: order_id is not null (type: boolean)
+--            Statistics: Num rows: 29507 Data size: 3068825 Basic stats: COMPLETE Column stats: NONE
+--            Filter Operator
+--              predicate: order_id is not null (type: boolean)
+--              Statistics: Num rows: 14754 Data size: 1534464 Basic stats: COMPLETE Column stats: NONE
+--              HashTable Sink Operator
+--                keys:
+--                  0 order_id (type: int)
+--                  1 order_item_order_id (type: int)
+--
+--  Stage: Stage-2
+--    Map Reduce
+--      Map Operator Tree:
+--          TableScan
+--            alias: oi
+--            filterExpr: order_item_order_id is not null (type: boolean)
+--            Statistics: Num rows: 450740 Data size: 5408880 Basic stats: COMPLETE Column stats: NONE
+--            Filter Operator
+--              predicate: order_item_order_id is not null (type: boolean)
+--              Statistics: Num rows: 225370 Data size: 2704440 Basic stats: COMPLETE Column stats: NONE
+--              Map Join Operator
+--                condition map:
+--                     Inner Join 0 to 1
+--                keys:
+--                  0 order_id (type: int)
+--                  1 order_item_order_id (type: int)
+--                outputColumnNames: _col1, _col11
+--                Statistics: Num rows: 247907 Data size: 2974884 Basic stats: COMPLETE Column stats: NONE
+--                Group By Operator
+--                  aggregations: sum(_col11)
+--                  keys: _col1 (type: string)
+--                  mode: hash
+--                  outputColumnNames: _col0, _col1
+--                  Statistics: Num rows: 247907 Data size: 2974884 Basic stats: COMPLETE Column stats: NONE
+--                  Reduce Output Operator
+--                    key expressions: _col0 (type: string)
+--                    sort order: +
+--                    Map-reduce partition columns: _col0 (type: string)
+--                    Statistics: Num rows: 247907 Data size: 2974884 Basic stats: COMPLETE Column stats: NONE
+--                    value expressions: _col1 (type: double)
+--      Local Work:
+--        Map Reduce Local Work
+--      Reduce Operator Tree:
+--        Group By Operator
+--          aggregations: sum(VALUE._col0)
+--          keys: KEY._col0 (type: string)
+--          mode: mergepartial
+--          outputColumnNames: _col0, _col1
+--          Statistics: Num rows: 123953 Data size: 1487436 Basic stats: COMPLETE Column stats: NONE
+--          Select Operator
+--            expressions: substr(_col0, 1, 10) (type: string), _col1 (type: double)
+--            outputColumnNames: _col0, _col1
+--            Statistics: Num rows: 123953 Data size: 1487436 Basic stats: COMPLETE Column stats: NONE
+--            File Output Operator
+--              compressed: false
+--              Statistics: Num rows: 123953 Data size: 1487436 Basic stats: COMPLETE Column stats: NONE
+--              table:
+--                  input format: org.apache.hadoop.mapred.TextInputFormat
+--                  output format: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+--                  serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+--
+--  Stage: Stage-0
+--    Fetch Operator
+--      limit: -1
+--      Processor Tree:
+--        ListSink
