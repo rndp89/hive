@@ -7,6 +7,7 @@ LOAD DATA LOCAL INPATH '/home/randeep89/largedeck.txt.gz' INTO TABLE deck_local;
 --You can also compress output of a select query while inserting data into table.
 --For this to happen, you have to set the following parameters.
 SET hive.exec.compress.output=true;
+SET hive.exec.compress.intermediate=true; --OPTIONAL , THIS COMPRESSES THE INTERMEDIATE OUTPUT OF MAPPER TO REDUCER 
 SET io.seqfile.compression.type=BLOCK; -- NONE/RECORD/BLOCK -- sets compression at record or block level
 INSERT INTO TABLE deck_local SELECT * FROM deck_hdfs;
 --above query will create a ".deflate" file, which compress data.
