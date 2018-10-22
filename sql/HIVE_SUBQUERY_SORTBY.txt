@@ -14,3 +14,4 @@ select order_status, count(1) order_status_count from orders group by order_stat
 select order_status, count(1) order_status_count from orders group by order_status order by order_status_count desc;
 
 --NEED TO PRACTICE SORT BY
+----

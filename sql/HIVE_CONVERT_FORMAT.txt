@@ -13,6 +13,6 @@ STORED AS AVRO;
 INSERT INTO TABLE orders_avro_convert
 Select * from orders;
 
---you can convert from any format to any format.
+--you can convert from any format to any format...
 
  
