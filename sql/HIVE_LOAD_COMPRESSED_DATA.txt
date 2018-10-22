@@ -1,0 +1,16 @@
+--COMPRESSED data has to match with the structure of the table.(like format, num of columns, delimiter)
+
+use order_r_partitioned
+LOAD DATA LOCAL INPATH '/home/randeep89/largedeck.txt.gz' INTO TABLE deck_local;
+-- it will also create compressed file ---/apps/hive/warehouse/order_r_partitioned.db/deck_local/largedeck.txt.gz
+
+--You can also compress output of a select query while inserting data into table.
+--For this to happen, you have to set the following parameters.
+SET hive.exec.compress.output=true;
+SET io.seqfile.compression.type=BLOCK; -- NONE/RECORD/BLOCK -- sets compression at record or block level
+INSERT INTO TABLE deck_local SELECT * FROM deck_hdfs;
+--above query will create a ".deflate" file, which compress data.
+--Each insert in any case will create a new file where data is stored. Instead of delete data of a particular insert, you can just remove the file created by that insert.
+
+
+ 
