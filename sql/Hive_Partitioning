@@ -18,6 +18,9 @@ alter table orders_partitioned_static add partition (order_month='2014-01');
 insert into table orders_partitioned_static partition (order_month='2014-01')
 select * from orders where order_date like '2014-01%';
 
+-- Validate partition parameters
+hive.exec.dynamic.partition=true //has to be true if the partitions have to be created by default
+hive.exec.dynamic.partition.mode=nonstrict
 
 CREATE TABLE orders_partitioned_dynamic_nonstrict (
   order_id int,
@@ -31,10 +34,6 @@ STORED AS TEXTFILE;
 
 -- Make sure hive execution engine is pointing to mr (for Cloudera certifications)
 set hive.execution.engine=mr;
-
--- Validate partition parameters
-hive.exec.dynamic.partition=true
-hive.exec.dynamic.partition.mode=nostrict
 
 -- If hive.exec.dynamic.partition.mode nonstrict, no need to add any partitions
 -- Use insert command to copy data from source table orders
@@ -62,6 +61,8 @@ hive.exec.dynamic.partition.mode=strict
 alter table orders_partitioned_dynamic_strict 
   add partition (order_year='2013', order_month='01')
       partition (order_year='2014', order_month='01');
+     
+This is called nested partition where the leading partition is by year and the lower level partition is by month.     
 
 -- If hive.exec.dynamic.partition.mode nostrict, no need to add any partitions
 -- Use insert command to copy data from source table orders
@@ -70,3 +71,6 @@ select o.*, substr(order_date, 6, 2) order_month from orders o where order_date 
 
 insert into table orders_partitioned_dynamic_strict partition (order_year='2013', order_month)
 select o.*, substr(order_date, 6, 2) order_month from orders o where order_date like '2013%';
+
+So for dynamic partition condition part, there will be an 'expression' in the selext query and
+for the static part there will a 'where' clause in select query.
