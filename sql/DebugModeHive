@@ -1,0 +1,2 @@
+To open hive in debug mode, to check detailed logs
+hive --hiveconf hive.root.logger=DEBUG,console
