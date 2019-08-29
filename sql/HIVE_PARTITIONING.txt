@@ -16,11 +16,15 @@ set hive.exec.dynamic.partition.mode=nonstrict
 hive.exec.dynamic.partition=true
       --otherwise you have two options:
       --create partitions manually and insert data into partitions manually.
-      --incase of sub-partitions, you just need to specify the parent partitions, subpartitions will be created dynamically even in strict mode.
+      --incase of sub-partitions, you just need to specify the parent partitions, subpartitions will be created dynamically even in 
+      strict mode.
 
 --now insert the data into partitioned table (order_r_partitioned.orders) from non partitioned table (orders_r.orders)
 INSERT INTO TABLE order_r_partitioned.orders partition (order_month)
-select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,  -- you can also use SELECT *, if not using substr(order_date, 1, 7) order_month from orders_r.orders; -- substr or any such transformation on any of  desc formatted orders; -- the columns.
+select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,  
+-- you can also use SELECT *, if not using substr(order_date, 1, 7) order_month from orders_r.orders; 
+-- substr or any such transformation on any of  desc formatted orders;
+-- the columns.
 
 
 -- select query sample
@@ -29,13 +33,7 @@ SELECT * FROM order_r_partitioned.orders WHERE order_month='2014-02' LIMIT 2;
       --30776   2014-02-01      11805   COMPLETE        2014-02
       --30777   2014-02-01      5114    ON_HOLD         2014-02
 
-      
-
-
 -- But, if you cat the partitions using following command, you will not see the order_month as above.
 hive (default)> dfs -cat /apps/hive/warehouse/order_r_partitioned.db/orders/order_month*/*;
 68681|2014-07-20|11014|PENDING_PAYMENT
 68682|2014-07-21|6017|COMPLETE
-
-
-
