@@ -16,11 +16,11 @@ set hive.exec.dynamic.partition.mode=nonstrict
 hive.exec.dynamic.partition=true
       --otherwise you have two options:
       --create partitions manually and insert data into partitions manually.
-      --incase of sub-partitions, you just need to specify the parent partitions, subpartitions will be created dynamically even in                                                                                                                               strict mode.
+      --incase of sub-partitions, you just need to specify the parent partitions, subpartitions will be created dynamically even in strict mode.
 
 --now insert the data into partitioned table (order_r_partitioned.orders) from non partitioned table (orders_r.orders)
 INSERT INTO TABLE order_r_partitioned.orders partition (order_month)
-select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,  -- you can also use SELECT *, if not using     substr(order_date, 1, 7) order_month from orders_r.orders;                               -- substr or any such transformation on any of  desc formatted orders;                                                                   -- the columns.
+select order_id, substr(order_date, 1, 10) order_date, order_customer_id, order_status,  -- you can also use SELECT *, if not using substr(order_date, 1, 7) order_month from orders_r.orders; -- substr or any such transformation on any of  desc formatted orders; -- the columns.
 
 
 -- select query sample
